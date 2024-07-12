@@ -1,6 +1,7 @@
 import { formatDate } from './formatDate';
 import { findNextNonEmptyLetterField } from './findNextNonEmptyLetterField';
 import { findNextNonEmptyNumberField } from './findNextNonEmptyNumberField';
+import logger from './logger';
 
 // Interface for the parsed patient data
 interface PatientData {
@@ -44,6 +45,7 @@ export function parseMessage(message: string): PatientData {
 
                 const dobField = findNextNonEmptyNumberField(fields, 1);
                 if (!dobField) {
+                    logger.warn('Invalid date format in PRS segment');
                     dateOfBirth = 'Invalid date format';
                 } else {
                     dateOfBirth = formatDate(dobField);
