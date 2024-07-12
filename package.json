@@ -1,26 +1,26 @@
 {
-  "name": "isla",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.14.10",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.2.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
-  },
-  "dependencies": {
-    "date-fns": "^3.6.0",
-    "express": "^4.19.2",
-    "winston": "^3.13.0"
-  }
+    "name": "isla",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/express": "^4.17.21",
+        "@types/jest": "^29.5.12",
+        "@types/node": "^20.14.10",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.2.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.5.3"
+    },
+    "dependencies": {
+        "date-fns": "^3.6.0",
+        "express": "^4.19.2",
+        "winston": "^3.13.0"
+    }
 }
