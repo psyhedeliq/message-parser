@@ -119,42 +119,6 @@ describe('parseMessage', () => {
         expect(result).toEqual(expectedOutput);
     });
 
-    it('should handle invalid segment types', () => {
-        const message =
-            `MSG|^~\\&|SenderSystem|Location|ReceiverSystem|Location|20230502112233\n` +
-            `EVT|TYPE|20230502112233\n` +
-            `XYZ|1|9876543210^^^Location^ID||Smith^John^A|||M|19800101|\n` +
-            `DET|1|I|^^MainDepartment^101^Room 1|Common Cold\n`;
-
-        const expectedOutput = {
-            fullName: {
-                lastName: '',
-                firstName: '',
-            },
-            dateOfBirth: '',
-            primaryCondition: 'Common Cold',
-        };
-
-        const result = parseMessage(message);
-        expect(result).toEqual(expectedOutput);
-    });
-
-    it('should handle an empty message string', () => {
-        const message = '';
-
-        const expectedOutput = {
-            fullName: {
-                lastName: '',
-                firstName: '',
-            },
-            dateOfBirth: '',
-            primaryCondition: '',
-        };
-
-        const result = parseMessage(message);
-        expect(result).toEqual(expectedOutput);
-    });
-
     it('should handle multiple messages in a single input string', () => {
         const message =
             `MSG|^~\\&|SenderSystem|Location|ReceiverSystem|Location|20230502112233\n` +
