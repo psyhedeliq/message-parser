@@ -57,7 +57,7 @@ export function parseMessage(message: string): PatientData {
 
             case 'DET':
                 // Extract primary condition from DET segment
-                primaryCondition = fields[4] || '';
+                primaryCondition = fields[4];
                 if (!primaryCondition) {
                     throw new ValidationError(
                         'Primary condition is missing in DET segment'
