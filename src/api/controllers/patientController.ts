@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { parseMessage } from '../../utils/messageParser';
+import { ValidationError } from '../../utils/errors';
 
 /**
  * Controller to handle parsing of patient messages.
@@ -15,7 +16,16 @@ import { parseMessage } from '../../utils/messageParser';
 
 export const parseMessageController = (req: Request, res: Response): void => {
     try {
+        if (!req?.body?.message) {
+            throw new ValidationError('Message is required');
+        }
+
         const message = req.body.message;
+
+        if (typeof message !== 'string' || message.trim().length === 0) {
+            throw new ValidationError('Invalid message format');
+        }
+
         const patientData = parseMessage(message);
 
         // Mock database interaction
@@ -23,8 +33,12 @@ export const parseMessageController = (req: Request, res: Response): void => {
 
         res.status(200).json(patientData);
     } catch (error) {
-        res.status(500).json({
-            error: 'An error occurred while processing the message.',
-        });
+        if (error instanceof ValidationError) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(500).json({
+                error: 'An error occurred while processing the message.',
+            });
+        }
     }
 };
