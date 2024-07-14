@@ -1,4 +1,5 @@
 import logger from './logger';
+import { ValidationError } from './errors';
 
 /**
  * Logs the error message to the console.
@@ -8,5 +9,9 @@ import logger from './logger';
  */
 
 export function handleError(error: Error): void {
-    logger.error(`An error occurred: ${error.message}`);
+    if (error instanceof ValidationError) {
+        logger.warn(`Validation error: ${error.message}`);
+    } else {
+        logger.error(`An error occurred: ${error.message}`);
+    }
 }
