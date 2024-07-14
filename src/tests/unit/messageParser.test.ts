@@ -42,33 +42,48 @@ describe('parseMessage', () => {
         expect(result).toEqual(expectedOutput);
     });
 
-    it('should handle incorrect date format', () => {
+    it('should throw an error when date of birth is invalid', () => {
         const message =
             `MSG|^~\\&|SenderSystem|Location|ReceiverSystem|Location|20230502112233\n` +
             `EVT|TYPE|20230502112233\n` +
             `PRS|1|9876543210^^^Location^ID||Smith^John^A|||M|1980-01-01|\n` +
             `DET|1|I|^^MainDepartment^101^Room 1|Common Cold\n`;
 
-        const expectedOutput = {
-            fullName: {
-                lastName: 'Smith',
-                firstName: 'John',
-                middleName: 'A',
-            },
-            dateOfBirth: 'Invalid date format',
-            primaryCondition: 'Common Cold',
-        };
-
-        const result = parseMessage(message);
-        expect(result).toEqual(expectedOutput);
+        expect(() => parseMessage(message)).toThrow(
+            'Invalid date format in PRS segment'
+        );
     });
 
-    it('should handle missing fields; middle name and primary condition', () => {
+    it('should throw an error when primary condition is missing', () => {
         const message =
             `MSG|^~\\&|SenderSystem|Location|ReceiverSystem|Location|20230502112233\n` +
             `EVT|TYPE|20230502112233\n` +
             `PRS|1|9876543210^^^Location^ID||Smith^John|||M|19800101|\n` +
             `DET|1|I|^^MainDepartment^101^Room 1|\n`;
+
+        expect(() => parseMessage(message)).toThrow(
+            'Primary condition is missing in DET segment'
+        );
+    });
+
+    it('should throw an error when name field is missing in PRS segment', () => {
+        const message =
+            `MSG|^~\\&|SenderSystem|Location|ReceiverSystem|Location|20230502112233\n` +
+            `EVT|TYPE|20230502112233\n` +
+            `PRS|1|9876543210^^^Location^ID|||\n` +
+            `DET|1|I|^^MainDepartment^101^Room 1|Condition\n`;
+
+        expect(() => parseMessage(message)).toThrow(
+            'Name field is missing in PRS segment'
+        );
+    });
+
+    it('should handle when middle name is missing', () => {
+        const message =
+            `MSG|^~\\&|SenderSystem|Location|ReceiverSystem|Location|20230502112233\n` +
+            `EVT|TYPE|20230502112233\n` +
+            `PRS|1|9876543210^^^Location^ID||Smith^John|||M|19800101|\n` +
+            `DET|1|I|^^MainDepartment^101^Room 1|Common Cold\n`;
 
         const expectedOutput = {
             fullName: {
@@ -76,7 +91,7 @@ describe('parseMessage', () => {
                 firstName: 'John',
             },
             dateOfBirth: '1980-01-01',
-            primaryCondition: '',
+            primaryCondition: 'Common Cold',
         };
 
         const result = parseMessage(message);
